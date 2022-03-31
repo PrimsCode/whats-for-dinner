@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block TITLE %}{{user.username}}'s Favorites{% endblock %}
+
+{% block BODY %}
+
+
+
+<div class="row">
+    <div class="container m-2 justify-content-center text-center text-dark align-content-top">
+        {% with messages = get_flashed_messages(category_filter=['info']) %}
+            {% if messages %}
+                {% for msg in messages %}
+                <div class="m-2 justify-content-center">               
+                    <div class="container w-75 bg-info text-dark">
+                         <p class="pt-2 pb-2" style="font-weight:600">{{msg}}</p>
+                     </div>     
+                 </div>           
+                {% endfor %}
+            {% endif %}
+        {% endwith %}    
+    
+        <div class="mt-2 justify-content-center">               
+            <div class="container w-75 text-center">
+                <h1 class="pt-3 pb-1" style="font-size:50px">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-danger" width="35" height="35" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                    {{user.username}}'s Favorite Dinners</h1>
+                    <div class="m-2 justify-content-center">                                     
+                        <div class="container m-2 justify-content-center text-center">
+                                <a href="/{{user.username}}/profile">
+                                <button class="btn btn-success text-center">{{user.username}}'s Profile</button></a>
+                        </div>    
+                    </div>          
+             </div>     
+         </div>
+         
+    </div>
+</div>
+
+<div class="row">
+    <div class="container m-2 justify-content-center text-center text-dark align-content-top">
+        
+    <div class="d-flex flex-wrap justify-content-center pt-2 ps-5" id="dinnerOutput">
+        {% for dinner in dinners %}
+            {% if dinner.favorites %}
+
+        <div class="container m-1 p-3 bg-secondary" style="width:250px; height:290px" id="{{dinner.id}}">
+            <p class="text-start pb-1" style="font-weight:600; font-size:14px">       
+                 <a href="#" class="text-decoration-none text-danger" id="{{dinner.id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="favorite-icon" id="{{dinner.id}}" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path class="favorite-icon" id="{{dinner.id}}" fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                </a>
+                Date: {{dinner.date}}
+            </p>
+            <p class="text-start m-0 p-0" style="font-size:11px">Appetizer:</p>
+            <p class="ms-1 me-1 text-center h5 bg-white textOverflow">{{dinner.appetizer_recipe.title}}</p>
+            <p class="text-start m-0 p-0" style="font-size:11px">Main Course:</p>
+            <p class="ms-1 me-1 text-center h5 bg-white textOverflow">{{dinner.main_course_recipe.title}}</p>
+            <p class="text-start m-0 p-0" style="font-size:11px">Side Dish:</p>
+            <p class="ms-1 me-1 text-center h5 bg-white textOverflow">{{dinner.side_dish_recipe.title}}</p>
+            <p class="text-start m-0 p-0" style="font-size:11px">Dessert:</p>
+            <p class="ms-1 me-1 text-center h5 bg-white textOverflow">{{dinner.dessert_recipe.title}}</p> 
+            
+            <a href="/dinner-view/{{dinner.id}}">
+                <button class="btn btn-success btn-sm" id="{{dinner.id}}">View</button> 
+            </a>
+            <a href="/dinner-edit/{{dinner.id}}">
+                <button class="btn btn-danger btn-sm" id="{{dinner.id}}">Edit</button> 
+            </a>
+                   
+        </div>
+        {% endif %} 
+        {% endfor %}
+                  
+           
+    </div> 
+
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

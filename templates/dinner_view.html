@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block TITLE %}Dinner Menu{% endblock %}
+
+{% block BODY %}
+
+<div class="row">
+    <div class="col pt-4 justify-content-center text-center text-dark align-content-top">
+    {% with messages = get_flashed_messages(category_filter=['info']) %}
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="m-2 justify-content-center">               
+                <div class="container m-2 bg-info text-dark">
+                     <p class="pt-2 pb-2" style="font-weight:600">{{msg}}</p>
+                 </div>     
+             </div>           
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% with errors = get_flashed_messages(category_filter=['error']) %}
+        {% if errors %}
+            {% for msg in errors %}
+            <div class="m-2 justify-content-center">               
+                <div class="container m-2 bg-warning text-dark">
+                     <p class="pt-2 pb-2" style="font-weight:600">{{msg}}</p>
+                 </div>     
+             </div>           
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="m-2 justify-content-center">               
+        <div class="container">
+             <h1 class="pt-3 pb-0 m-0" style="font-size:40px">Dinner Menu</h1>
+             <input type="hidden" id="menuId" name="user" value="{{menu.id}}">
+             <p class="text-center m-0 p-0" style="font-weight:500">Date: {{menu.date}}</p>
+             <p class="text-center m-0 p-0" style="font-weight:500">By: {{menu.users.username}}</p>
+         </div>   
+    </div>
+
+    <div class="m-2 justify-content-center">
+        
+        <div class="container w-75 p-2 bg-secondary" style="width:500px; height:420px">
+            <div class="container bg-primary">
+                <p style="font-size:11px"><i>Click on the title to get recipe</i></p>
+            </div>
+            <div class=" text-start" style="height:30px">
+                <p class="ps-2 pt-1 pb-1" style="font-size:15px;">Appetizer</p>
+            </div>
+            <div class="text-center ms-2 me-2 bg-white" id="appetizerMenu" style="height:50px">
+                {% if menu.appetizer_recipe != 'None' %}
+                <a href="#" class="text-dark text-decoration-none"><h3 class="pt-2 displayRecipe textOverflowLarge"  id="{{menu.appetizer_recipe.id}}">{{menu.appetizer_recipe.title}}</h3></a>
+                {% else %}
+                <h3 class="pt-2" id="{{menu.appetizer_recipe.id}}"></h3>
+                {% endif %}
+            </div>
+            
+            <div class="text-start" style="height:30px">
+                <p class="ps-2 pt-1 pb-1" style="font-size:15px;">Main Course</p>
+            </div>
+            <div class="text-center ms-2 me-2 bg-white" id="mainCourseMenu" style="height:50px">              
+                <a href="#" class="text-dark text-decoration-none"><h3 class="pt-2 displayRecipe textOverflowLarge" id="{{menu.main_course_recipe.id}}">{{menu.main_course_recipe.title}}</h3></a>
+            </div>
+            
+            <div class="text-start" style="height:30px">
+                <p class="ps-2 pt-1 pb-1" style="font-size:15px;">Side Dish</p>
+            </div>
+            <div class="text-center ms-2 me-2 bg-white" id="sideDishMenu" style="height:50px">
+                {% if menu.side_dish_recipe != 'None' %}
+                <a href="#" class="text-dark text-decoration-none"><h3 class="pt-2 displayRecipe textOverflowLarge" id="{{menu.side_dish_recipe.id}}">{{menu.side_dish_recipe.title}}</h3></a>
+                {% else %}
+                <h3 class="pt-2" id="{{menu.side_dish_recipe.id}}"></h3>
+                {% endif %}
+            </div> 
+
+            <div class="text-start" style="height:30px">
+                <p class="ps-2 pt-1 pb-1" style="font-size:15px;">Dessert</p>
+            </div>
+            <div class="text-center ms-2 me-2 bg-white" id="desserteMenu" style="height:50px">
+                {% if menu.dessert_recipe != 'None' %}
+                <a href="#" class="text-dark text-decoration-none"><h3 class="pt-2 displayRecipe textOverflowLarge" id="{{menu.dessert_recipe.id}}">{{menu.dessert_recipe.title}}</h3></a>
+                {% else %}
+                <h3 class="pt-2" id="{{menu.dessert_recipe.id}}"></h3>
+                {% endif %}
+            </div>
+
+            <div class="text-end m-2">
+                <a href="/{{user.username}}/profile">
+                    <button class="btn btn-sm btn-success mt-2">Back</button>
+                </a>
+                <a href="/printable/{{menu.id}}">
+                    <button class="btn btn-sm btn-success mt-2">Print Recipes</button>
+                </a>
+                {% if session['user_id'] == menu.user_id %}
+                <a href="/dinner-edit/{{menu.id}}">
+                    <button class="btn btn-sm btn-danger mt-2">Edit</button>
+                </a>
+                {% endif %}
+            </div>             
+                    
+        </div>
+               
+        
+     </div>
+
+    </div>
+
+    <div class="col pt-4 justify-content-center text-center text-dark align-content-top">
+        <div class="m-2 justify-content-center">               
+            <div class="container">
+                 <h1 class="pt-3 pb-0 m-0" style="font-size:40px">Recipe</h1>                
+             </div>   
+        </div>
+    
+        <div class="m-2 justify-content-center" id="recipeView">               
+         
+        </div>          
+    </div>              
+                
+</div>        
+
+
+
+
+
+
+
+{% endblock %}

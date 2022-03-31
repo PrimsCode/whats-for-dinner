@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block TITLE %}Home{% endblock %}
+
+{% block BODY %}
+
+<div class="row">
+    <div class="col pt-4 justify-content-center text-center text-dark align-content-top">
+
+        {% with messages = get_flashed_messages(category_filter=['info']) %}
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="m-2 justify-content-center">               
+                <div class="container m-2 bg-info text-dark">
+                     <p class="pt-2 pb-2" style="font-weight:600">{{msg}}</p>
+                 </div>     
+             </div>           
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% with errors = get_flashed_messages(category_filter=['error']) %}
+        {% if errors %}
+            {% for msg in errors %}
+            <div class="m-2 justify-content-center">               
+                <div class="container m-2 bg-warning text-dark">
+                     <p class="pt-2 pb-2" style="font-weight:600">{{msg}}</p>
+                 </div>     
+             </div>           
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        
+        <div class="m-2 justify-content-center">               
+            <div class="container m-2">
+                 <h1 class="pt-3" style="font-size:40px">What's For Dinner?</h1>
+             </div>     
+         </div>
+    
+        {% if session['user_id'] %}
+    
+        <div class="m-2 justify-content-center">               
+            <div class="container m-2 bg-secondary">
+                 <p class="pt-2 pb-2" >Select a date, meal type & search recipe</p>
+             </div>     
+        </div>
+
+        <div class="m-2 justify-content-center">               
+            <div class="container m-2 pt-3 bg-primary">
+                
+                <form method="GET" id="searchForm">
+                    <div class="form-group text-start pt-2">
+                        <label for="meal-type">Select Date:</label>
+                        <input type="date" class="form-control" placeholder="Select Date" id="datePicker">
+                    </div>
+                    
+                    <div class="form-group text-start pt-2">
+                        <label for="meal-type">Select Meal Type:</label>
+                        <select class="form-control" id="mealType" name="meal-type">
+                            <option value="" style="color:grey" disabled selected>Select Recipe</option>
+                            <option value="appetizer">Appetizer</option>
+                            <option value="main-course">Main Course</option>
+                            <option value="side-dish">Side Dish</option>
+                            <option value="dessert">Dessert</option>                    
+                        </select>
+                    </div>
+                    
+                    <div class="form-group text-start pt-2">
+                        <label for="meal-type">Search Recipe:</label>
+                        <input type="text" class="form-control" id="searchBar" name="searchBar" placeholder="Search Recipe">
+                    </div>
+                                   
+                     <div class="mt-2 mb-5 pb-3 text-end">                            
+                            <button class="btn btn-success btn-sm" type="submit" id="submitBtn">Search</button>
+                                    
+                    </div>                              
+                </form>                            
+            </div>  
+            
+        </div>
+        
+        {% else %}
+    
+        <div class="m-2 justify-content-center">               
+            <div class="container w-75 bg-warning">
+                 <p class="pt-2 pb-2">Please <a href="/signup" class="text-success" style="font-weight:600">sign up</a> or <a href="/login" class="text-success" style="font-weight:600">login</a> to get started!</p>
+             </div>     
+         </div>
+    
+        {% endif %}           
+         
+    </div>
+
+    
+    <div class="col text-center pt-4 justify-content-center">
+    
+        <div class="mt-2 justify-content-center">         
+            
+                 <h1 class="pt-3 mt-2" style="font-size:40px">Dinner Menu</h1>
+             
+             <div class="justify-content-center" id="dateDisplay">            
+                
+            </div>     
+         </div>
+         
+        <div class="m-2 justify-content-center">               
+            <div class="container m-2 p-3 bg-secondary justify-content-center">
+                
+                <p class="pt-1 text-start" style="font-weight:800">Appetizer <i style="font-size:12px; font-weight:300">Optional</i></p>
+                <div class="container mr-2 ml-2 mb-1 text-center bg-white rounded title-output" id="appetizerOutput" style="height:45px">
+                   
+                </div>
+
+                <p class="pt-1 text-start" style="font-weight:800">Main Course</p>
+                <div class="container mr-2 ml-2 mb-1 text-center bg-white rounded title-output" id="mainCourseOutput" style="height:45px">
+                   
+                </div>
+
+                <p class="pt-1 text-start" style="font-weight:800">Side Dish <i style="font-size:12px; font-weight:300">Optional</i></p>
+                <div class="container mr-2 ml-2 mb-1 text-center bg-white rounded title-output" id="sideDishOutput" style="height:45px">
+                   
+                </div>
+
+                <p class="pt-1 text-start" style="font-weight:800">Dessert <i style="font-size:12px; font-weight:300">Optional</i></p>
+                <div class="container mr-2 ml-2 mb-1 text-center bg-white rounded title-output" id="dessertOutput" style="height:45px">
+                   
+                </div>
+
+                <div class="container p-0 text-end dinnerBtn" id="{{dinner_id}}">                                            
+                        <button class="btn btn-success btn-sm mt-2" type="submit" onclick="submitDinnerMenu()">Submit</button>                                  
+                </div>
+            </div>
+        </div>                                        
+    </div>
+    
+         <form method="POST" id="hiddenInput">             
+             <input type="hidden" id="username" name="username" value="{{user.username}}">    
+         </form>          
+</div>
+
+
+<div class="row">
+    <div class="mt-2 justify-content-center text-center" id="searchTitle">         
+            
+         
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center" id="searchOutput">          
+           
+    </div> 
+
+    
+
+</div>
+
+
+
+
+{% endblock %}

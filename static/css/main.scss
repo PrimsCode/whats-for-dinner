@@ -1,0 +1,33 @@
+$primary:#FFEDCD;
+$secondary: #BEE4D6;
+$success: #4ECD9F;
+$danger: #EB5D45;
+$warning:#F6B6AC;
+$info: #ADB7D9;
+$dark: #323449;
+
+$input-placeholder-color:$info;
+
+
+$font-family-sans-serif: 'DM Sans', sans-serif;
+$font-family-monospace: 'Staatliches', cursive;
+$font-family-base: $font-family-sans-serif;
+$headings-font-family: $font-family-monospace;
+
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Staatliches&display=swap");
+
+.textOverflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 230px;
+}
+
+.textOverflowLarge {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 480px;
+}

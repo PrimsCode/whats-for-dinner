@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Shopping List</title>
+
+    <link rel="stylesheet" href="{{url_for('static', filename='/css/main.css')}}">
+    <!-- <link rel="stylesheet" href="/whats-for-dinner2/whats-for-dinner/static/style.css"> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Staatliches&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+</head>
+<body class="bg-light text-dark" id="printAllIngredients">
+    
+    <div class="container justify-content-start" id="ingredientView">        
+        {% for recipe in recipes %}
+        <input type="hidden" id="recipeId" name="recipeId" value="{{recipe}}">
+        {% endfor %}
+        
+        <p style="font-size:11px">
+            <a href="/dinner-view/{{menu.id}}"><button class="m-1 btn btn-sm btn-success" style="font-size:11px">Back</button></a>
+            <span style="font-weight:500">Direction:</span> Right click and select print or use Ctrl P keyboard shortcut.</p>
+        
+        <div class="flex" id="shoppingListOutput">
+            <div class="container-fluid border justify-content-start" style="max-width:350px">
+
+                <h3>Shopping List:</h3>
+                
+                <p class="h5" style="font-size:12px;">Ingredients:</p>
+                <ol id="ingredientDisplay" style="font-size:14px">
+                </ol>
+                
+                
+            </div>
+        </div>
+
+    </div>                                                                            
+  
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="module" src="{{url_for('static', filename='app.js')}}"></script>
+</body>
+</html>
