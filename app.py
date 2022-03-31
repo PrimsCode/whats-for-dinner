@@ -11,7 +11,7 @@ app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', '12345')
 app.debug = True
 debug = DebugToolbarExtension(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL?sslmode=require').replace('postgres://', 'postgresql://')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://')
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
