@@ -3,6 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, DinnerMenu, Recipe, FavoriteDinnerMenu
 from forms import LoginForm, SignUpForm
 import os
+import re
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
@@ -11,6 +12,11 @@ app.debug = True
 debug = DebugToolbarExtension(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner')
+uri = os.getenv("DATABASE_URL")
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
+    
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
