@@ -98,6 +98,7 @@ def logout():
 @app.route('/<username>/dinner-plan', methods=['GET'])
 def plan_dinner(username):
     """Show page to create dinner menu"""
+    db.engine.dispose()
     user = User.query.filter_by(username=username).first()
     if db.session.query(DinnerMenu).order_by(DinnerMenu.id.desc()).first():
         dinner = db.session.query(DinnerMenu).order_by(DinnerMenu.id.desc()).first()
@@ -182,6 +183,7 @@ def processInfo(dinner_menu):
 @app.route('/dinner-view/<menu_id>', methods=['GET', 'POST'])
 def view_complete_dinner(menu_id):
     """Show edit dinner menu"""
+    db.engine.dispose()
    
     userid = session['user_id']
     user = User.query.get_or_404(userid)
@@ -193,6 +195,7 @@ def view_complete_dinner(menu_id):
 @app.route('/dinner-edit/<menu_id>', methods=['Get'])
 def edit_dinner_plan(menu_id):
     """Edit dinner menu"""
+    db.engine.dispose()
 
     userid = session['user_id']
     user = User.query.get_or_404(userid)
@@ -263,17 +266,19 @@ def editInfo(dinner_menu):
     
     return 'Dinner Menu Edited'
 
-@app.route('/<username>/profile')
+@app.route('/<username>/profile', methods=['GET'])
 def show_user_profile(username):
     """Show user profile"""
+    db.engine.dispose()
     user = User.query.filter_by(username=username).first()
     dinners = db.session.query(DinnerMenu).filter_by(user_id=user.id).order_by(DinnerMenu.date.desc()).all()
 
     return render_template('user_profile.html', user=user, dinners=dinners)
 
-@app.route('/<username>/favorites')
+@app.route('/<username>/favorites', methods=['GET'])
 def show_favorite_dinners(username):
     """Show user profile"""
+    db.engine.dispose()
     user = User.query.filter_by(username=username).first()
     dinners = db.session.query(DinnerMenu).filter_by(user_id=user.id).order_by(DinnerMenu.date.desc()).all()
 
@@ -281,6 +286,7 @@ def show_favorite_dinners(username):
 
 @app.route('/processFav/<string:favorite>', methods=['POST', 'GET'])
 def processFav(favorite):
+    db.engine.dispose()
 
     userid = session['user_id']
     favorite = json.loads(favorite)    
@@ -293,6 +299,7 @@ def processFav(favorite):
 
 @app.route('/processUnFav/<string:favorite>', methods=['POST', 'GET'])
 def processUnFav(favorite):
+    db.engine.dispose()
 
     userid = session['user_id']
     favorite = json.loads(favorite)
@@ -305,6 +312,7 @@ def processUnFav(favorite):
 
 @app.route('/printable/<menu_id>/<recipe_id>', methods=['GET'])
 def show_printable_recipe(menu_id, recipe_id):
+    db.engine.dispose()
 
     userid = session['user_id']
     user = User.query.get_or_404(userid)
@@ -315,6 +323,7 @@ def show_printable_recipe(menu_id, recipe_id):
 
 @app.route('/printable/<menu_id>/<recipe_id>/shopping-list', methods=['GET'])
 def show_printable_shopping_list(menu_id, recipe_id):
+    db.engine.dispose()
 
     userid = session['user_id']
     user = User.query.get_or_404(userid)
@@ -325,6 +334,7 @@ def show_printable_shopping_list(menu_id, recipe_id):
 
 @app.route('/printable/<menu_id>', methods=['GET'])
 def show_print_all_recipes(menu_id):
+    db.engine.dispose()
 
     userid = session['user_id']
     user = User.query.get_or_404(userid)
@@ -345,6 +355,7 @@ def show_print_all_recipes(menu_id):
 
 @app.route('/printable/<menu_id>/shopping-list-all', methods=['GET'])
 def show_printable_all_shopping_list(menu_id):
+    db.engine.dispose()
 
     userid = session['user_id']
     user = User.query.get_or_404(userid)

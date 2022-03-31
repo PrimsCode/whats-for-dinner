@@ -18,11 +18,12 @@ const searchForm = document.querySelector('#searchForm');
 const submitBtn = document.querySelector('#submitBtn');
 const editBtn = document.querySelector('#editBtn');
 const dinnerBtn = document.querySelector('.dinnerBtn');
-const hiddenInput = document.querySelector('#hiddenInput');
 const dinnerOutput = document.querySelector('#dinnerOutput');
 const displayRecipe = document.getElementsByClassName('displayRecipe');
 const printRecipe = document.querySelector("#printRecipe");
 const printMenu = document.querySelector("#printMenu");
+const editMenu = document.querySelector('.editMenu');
+
 
 //function for datepicker calendar 
 flatpickr("input[type=date]", {
@@ -460,11 +461,10 @@ function editDinnerMenu(){
     dinnerId;
     dinnerBtn.innerHTML += `<a href="/dinner-view/${dinnerId}">
     <button class="btn btn-success mt-2" type="submit">View Edited Menu</button>
-    </a>`
+    </a>`;
 }
 
 //add dinner menu data to the edit dinner menu page
-const editMenu = document.querySelector('.editMenu');
 if (editMenu) {
     let appetizerId = document.querySelector('#editAppetizerId').value;
     let mainCourseId = document.querySelector('#editMainCourseId').value;  
@@ -500,4 +500,3 @@ if (editMenu) {
         outputMenu(output, dessert);
     };
 }
-
