@@ -16,6 +16,7 @@ const searchOutput = document.querySelector('#searchOutput');
 const datePicker = document.querySelector('#datePicker');
 const searchForm = document.querySelector('#searchForm');
 const submitBtn = document.querySelector('#submitBtn');
+const editBtn = document.querySelector('#editBtn');
 const dinnerBtn = document.querySelector('.dinnerBtn');
 const hiddenInput = document.querySelector('#hiddenInput');
 const dinnerOutput = document.querySelector('#dinnerOutput');
@@ -149,6 +150,10 @@ function outputMenu(output, res){
 if(dinnerBtn){
     dinnerId = dinnerBtn.id;
 }
+
+
+if(submitBtn){
+    submitBtn.addEventListener('click', submitDinnerMenu());
 
 //send dinner menu data to Flask & commit to database
 function submitDinnerMenu(){
@@ -431,6 +436,11 @@ function createMenuObj(menu){
         };
     };
     return menu;
+}
+
+
+if (editBtn){
+    editBtn.addEventListener('click', editDinnerMenu());
 }
 
 //send updated dinner menu data to Flask & commit to database for edit
