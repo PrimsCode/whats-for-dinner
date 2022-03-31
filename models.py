@@ -49,7 +49,7 @@ class DinnerMenu(db.Model):
     side_dish = db.Column(db.Integer, ForeignKey('recipes.id'))
     dessert = db.Column(db.Integer, ForeignKey('recipes.id'))
 
-    users = db.relationship('User', backref='dinners')
+    users = db.relationship('User', backref='dinners', foreign_keys=[user_id])
 
     appetizer_recipe = db.relationship('Recipe', backref='app_dinners', foreign_keys=[appetizer])
     main_course_recipe = db.relationship('Recipe', backref='mc_inners', foreign_keys=[main_course])
