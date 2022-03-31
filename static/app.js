@@ -168,7 +168,7 @@ function submitDinnerMenu(){
     request.send();
 
     const titleOutput = document.getElementsByClassName('title-output');
-    for (i=0; i<titleOutput.length; i++){
+    for (let i=0; i<titleOutput.length; i++){
         titleOutput[i].innerHTML = '';
     }
    
