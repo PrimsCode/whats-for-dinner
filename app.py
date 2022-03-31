@@ -102,10 +102,11 @@ def plan_dinner(username):
     user = User.query.filter_by(username=username).first()
     if db.session.query(DinnerMenu).order_by(DinnerMenu.id.desc()).first():
         dinner = db.session.query(DinnerMenu).order_by(DinnerMenu.id.desc()).first()
+        dinner_id = dinner.id
     else:
-        dinner = {id: 0}      
+        dinner_id = 0     
     
-    return render_template('dinner_plan.html', user=user, dinner_id=dinner.id)
+    return render_template('dinner_plan.html', user=user, dinner_id=dinner_id)
 
 @app.route('/processInfo/<string:dinner_menu>', methods=['POST', 'GET'])
 def processInfo(dinner_menu):
