@@ -79,7 +79,7 @@ function outputResults(res){
     const searchTitle = document.querySelector('#searchTitle');    
     searchTitle.innerHTML = "<h1 class='pt-3 mt-2' style='font-size:40px'>Search Results</h1>";  
 
-    for (i=0; i< res.results.length; i++){
+    for (let i=0; i< res.results.length; i++){
         console.log(res.results[i]);
         let newTitle = "";
 
