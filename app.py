@@ -187,9 +187,10 @@ def view_complete_dinner(menu_id):
    
     userid = session['user_id']
     user = User.query.get_or_404(userid)
-    menu = DinnerMenu.query.filter_by(id=menu_id).first()   
+    menu = DinnerMenu.query.filter_by(id=menu_id).first()
+    menu_user = menu.users   
 
-    return render_template('dinner_view.html', user=user, menu=menu)
+    return render_template('dinner_view.html', user=user, menu=menu, menu_user=menu_user)
 
 
 @app.route('/dinner-edit/<menu_id>', methods=['Get'])
