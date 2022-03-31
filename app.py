@@ -100,9 +100,11 @@ def logout():
 def plan_dinner(username):
     """Show page to create dinner menu"""
     user = User.query.filter_by(username=username).first()
-    dinner = db.session.query(DinnerMenu).order_by(DinnerMenu.id.desc()).first()
+    if db.session.query(DinnerMenu).order_by(DinnerMenu.id.desc()).first():
+        dinner = db.session.query(DinnerMenu).order_by(DinnerMenu.id.desc()).first()
+    else:
+        dinner = {id: 0}      
     
-
     return render_template('dinner_plan.html', user=user, dinner_id=dinner.id)
 
 @app.route('/processInfo/<string:dinner_menu>', methods=['POST', 'GET'])
