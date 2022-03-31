@@ -2,14 +2,15 @@ from flask import Flask, render_template, redirect, flash, url_for, request, ses
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, DinnerMenu, Recipe, FavoriteDinnerMenu
 from forms import LoginForm, SignUpForm
+import os
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
-app.config['SECRET_KEY']="12345"
+app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', '12345')
 app.debug = True
 debug = DebugToolbarExtension(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5432/whats_for_dinner'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
