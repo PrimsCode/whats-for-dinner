@@ -155,6 +155,7 @@ if(dinnerBtn){
 
 if(submitBtn){
     submitBtn.addEventListener('click', submitDinnerMenu());
+}
 
 //send dinner menu data to Flask & commit to database
 function submitDinnerMenu(){
