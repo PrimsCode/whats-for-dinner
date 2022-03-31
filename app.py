@@ -188,7 +188,7 @@ def view_complete_dinner(menu_id):
     userid = session['user_id']
     user = User.query.get_or_404(userid)
     menu = DinnerMenu.query.filter_by(id=menu_id).first()
-    menu_user = menu.users   
+    menu_user = User.query.get_or_404(menu.user_id)
 
     return render_template('dinner_view.html', user=user, menu=menu, menu_user=menu_user)
 
