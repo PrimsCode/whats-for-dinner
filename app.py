@@ -11,7 +11,7 @@ app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', '12345')
 app.debug = True
 debug = DebugToolbarExtension(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner').replace('postgres://', 'postgresql://')
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
@@ -113,10 +113,10 @@ def processInfo(dinner_menu):
 
     userid = session['user_id']
     user = User.query.get_or_404(userid)
-    dinner_menu = json.loads(dinner_menu)
-    main_course = dinner_menu['main_course']
-    date = dinner_menu['date']['date']
-    
+    temp_dinner_menu = json.loads(dinner_menu)
+    date = temp_dinner_menu['date']['date']
+    main_course = temp_dinner_menu['main_course']
+      
     if DinnerMenu.query.filter_by(date=date, user_id=user.id).first():
         flash('Dinner Menu Already Exist! Please select a different date', 'error')
         return redirect(f'{user.username}/dinner-plan') 
@@ -138,8 +138,8 @@ def processInfo(dinner_menu):
 
     new_menu = DinnerMenu.query.filter_by(date=date, user_id=user.id).first()   
 
-    if dinner_menu['appetizer']:
-        recipe = dinner_menu['appetizer']
+    if temp_dinner_menu['appetizer']['id'] != None:
+        recipe = temp_dinner_menu['appetizer']
         if Recipe.query.get(recipe['id']):
             exist_recipe = Recipe.query.get(recipe['id'])
             new_menu.appetizer = exist_recipe.id
@@ -147,11 +147,11 @@ def processInfo(dinner_menu):
             new_recipe = Recipe(id = recipe['id'], title = recipe['title'])
             db.session.add(new_recipe)
             db.session.commit()
-
             added_recipe = Recipe.query.get(recipe['id'])
             new_menu.appetizer = added_recipe.id
-    if dinner_menu['side_dish']:
-        recipe = dinner_menu['side_dish']
+
+    if temp_dinner_menu['side_dish']['id'] != None:
+        recipe = temp_dinner_menu['side_dish']
         if Recipe.query.get(recipe['id']):
             exist_recipe = Recipe.query.get(recipe['id'])
             new_menu.side_dish = exist_recipe.id
@@ -159,11 +159,11 @@ def processInfo(dinner_menu):
             new_recipe = Recipe(id = recipe['id'], title = recipe['title'])
             db.session.add(new_recipe)
             db.session.commit()
-
             added_recipe = Recipe.query.get(recipe['id'])
             new_menu.side_dish = added_recipe.id
-    if dinner_menu['dessert']:
-        recipe = dinner_menu['dessert']
+
+    if temp_dinner_menu['dessert']['id'] != None:
+        recipe = temp_dinner_menu['dessert']
         if Recipe.query.get(recipe['id']):
             exist_recipe = Recipe.query.get(recipe['id'])
             new_menu.dessert = exist_recipe.id
@@ -171,14 +171,13 @@ def processInfo(dinner_menu):
             new_recipe = Recipe(id = recipe['id'], title = recipe['title'])
             db.session.add(new_recipe)
             db.session.commit()
-
             added_recipe = Recipe.query.get(recipe['id'])
             new_menu.dessert = added_recipe.id
     
     db.session.commit()
     
     
-    return print('Dinner Menu Added')
+    return redirect(f'/dinner-view/{new_menu.id}')
 
 @app.route('/dinner-view/<menu_id>', methods=['GET', 'POST'])
 def view_complete_dinner(menu_id):

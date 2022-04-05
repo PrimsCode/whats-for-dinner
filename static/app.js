@@ -23,6 +23,7 @@ const displayRecipe = document.getElementsByClassName('displayRecipe');
 const printRecipe = document.querySelector("#printRecipe");
 const printMenu = document.querySelector("#printMenu");
 const editMenu = document.querySelector('.editMenu');
+const errorMessage = document.querySelector("#errorMsg");
 
 
 //function for datepicker calendar 
@@ -53,7 +54,8 @@ if (searchForm) {
         const dateDisplay = document.querySelector('#dateDisplay')
         ;
         searchOutput.innerHTML = '';            
-        date = datePicker.value;    
+        date = datePicker.value;
+        console.log(date);    
         dateDisplay.innerHTML = `<div class="container w-75">
                                     <p class="pb-2 h5" >Date: ${date}</p>
                                 </div>`;    
@@ -152,31 +154,37 @@ if(dinnerBtn){
     dinnerId = dinnerBtn.id;
 }
 
-
-if(submitBtn){
-    submitBtn.addEventListener('click', submitDinnerMenu());
-}
-
 //send dinner menu data to Flask & commit to database
-function submitDinnerMenu(){
-    let menu = {};
-    createMenuObj(menu);
-    menu['date'] = {date: date};
-
-    const request = new XMLHttpRequest()
-    request.open('POST', `/processInfo/${JSON.stringify(menu)}`);
-    request.send();
-
-    const titleOutput = document.getElementsByClassName('title-output');
-    for (let i=0; i<titleOutput.length; i++){
-        titleOutput[i].innerHTML = '';
-    }
-   
-    dinnerId ++;
-    dinnerBtn.innerHTML += `<a href="/dinner-view/${dinnerId}">
-    <button class="btn btn-danger p-2 mt-2" type="submit">View Created Menu</button>
-    </a>`
+if(submitBtn){
+    submitBtn.addEventListener('click', function submitDinnerMenu(){
+        let menu = {};
+        menu['date'] = {date: date};
+        createMenuObj(menu);
+        console.log(menu);
+        
+        const request = new XMLHttpRequest()
+        request.open('POST', `/processInfo/${JSON.stringify(menu)}`);
+        request.send();
+    
+        const titleOutput = document.getElementsByClassName('title-output');
+        for (let i=0; i<titleOutput.length; i++){
+            titleOutput[i].innerHTML = '';
+        }
+       
+        dinnerId ++;
+        dinnerBtn.innerHTML += `<a href="/dinner-view/${dinnerId}">
+        <button class="btn btn-danger p-2 mt-2" type="submit">View Created Menu</button>
+        </a>`
+    });
 }
+
+function error(){
+    if (errorMessage){
+        errorMessage.innerHTML += `<div class="m-2 justify-content-center"><div class="container m-2 bg-warning text-dark">
+                     <p class="pt-2 pb-2" style="font-weight:600">Please select a main course for your dinner!</p>
+                 </div></div>`;
+    }        
+};
 
 //Handle favoriting and unfavoriting dinner menus
 if (dinnerOutput) {
@@ -413,30 +421,49 @@ function instructionOutput(json){
 
 //Create menu object to send to flask
 function createMenuObj(menu){
-    if (appetizer != null){
-        menu['appetizer'] = {
-            id: appetizer.id,
-            title: appetizer.title
-        };
-    };
     if (mainCourse != null){
         menu['main_course'] = {
             id: mainCourse.id,
             title: mainCourse.title
         };
-    };
+    } else {
+        return error();
+    }
+    
+    if (appetizer != null){
+        menu['appetizer'] = {
+            id: appetizer.id,
+            title: appetizer.title
+        };
+    } else {
+        menu['appetizer'] = {
+            id: null
+        };
+    }
+
     if (sideDish != null){
         menu['side_dish'] = {
             id: sideDish.id,
             title: sideDish.title
         };
-    };
+    } else {
+        menu['side_dish'] = {
+            id: null
+        };
+    }
+
     if (dessert != null){
         menu['dessert'] = {
             id: dessert.id,
             title: dessert.title
         };
-    };
+    } else {
+        menu['dessert'] = {
+            id: null
+        };
+    }
+
+
     return menu;
 }
 
@@ -449,14 +476,14 @@ if (editBtn){
 function editDinnerMenu(){
     let user_id = document.querySelector('#editUserMenu').value;
     let menu = {};
-    createMenuObj(menu);
-
     menu['id'] = {id:dinnerId};
     menu['date'] = {date: date};
     menu['user'] = {user_id: user_id};
     
+    createMenuObj(menu);    
+    
     const request = new XMLHttpRequest()
-    request.open('POST', `/editInfo/${JSON.stringify(menu)}`);
+    request.open('POST', `/editInfo/${JSON.stringify(menu)}`, true);
     request.send();
   
     dinnerId;
