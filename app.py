@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, flash, url_for, request, session, jsonify, make_response, json
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, DinnerMenu, Recipe, FavoriteDinnerMenu
 from forms import LoginForm, SignUpForm
 import os
@@ -9,10 +9,9 @@ app = Flask(__name__, static_url_path='', static_folder='static')
 
 app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', '12345')
 app.debug = True
-debug = DebugToolbarExtension(app)
+# debug = DebugToolbarExtension(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner').replace('postgres://', 'postgresql://')
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
@@ -110,6 +109,7 @@ def plan_dinner(username):
 
 @app.route('/processInfo/<string:dinner_menu>', methods=['POST', 'GET'])
 def processInfo(dinner_menu):
+    """Create dinner menu from JS data"""
 
     userid = session['user_id']
     user = User.query.get_or_404(userid)
@@ -174,10 +174,9 @@ def processInfo(dinner_menu):
             added_recipe = Recipe.query.get(recipe['id'])
             new_menu.dessert = added_recipe.id
     
-    db.session.commit()
+    db.session.commit()    
     
-    
-    return redirect(f'/dinner-view/{new_menu.id}')
+    return 'Dinner Menu Created'
 
 @app.route('/dinner-view/<menu_id>', methods=['GET', 'POST'])
 def view_complete_dinner(menu_id):
@@ -211,6 +210,7 @@ def edit_dinner_plan(menu_id):
 
 @app.route('/editInfo/<string:dinner_menu>', methods=['POST', 'GET'])
 def editInfo(dinner_menu):
+    """Edit created dinner menu from JS data"""
 
     temp_dinner_menu = json.loads(dinner_menu)
     menu_id = temp_dinner_menu['id']['id']
@@ -280,7 +280,7 @@ def show_user_profile(username):
 
 @app.route('/<username>/favorites', methods=['GET'])
 def show_favorite_dinners(username):
-    """Show user profile"""
+    """Show user's favorite dinner menus'"""
     db.engine.dispose()
     user = User.query.filter_by(username=username).first()
     dinners = db.session.query(DinnerMenu).filter_by(user_id=user.id).order_by(DinnerMenu.date.desc()).all()
@@ -289,6 +289,8 @@ def show_favorite_dinners(username):
 
 @app.route('/processFav/<string:favorite>', methods=['POST', 'GET'])
 def processFav(favorite):
+    """create favorite dinner menu"""
+
     db.engine.dispose()
 
     userid = session['user_id']
@@ -302,6 +304,8 @@ def processFav(favorite):
 
 @app.route('/processUnFav/<string:favorite>', methods=['POST', 'GET'])
 def processUnFav(favorite):
+    """Unfavorite dinner menu"""
+
     db.engine.dispose()
 
     userid = session['user_id']
@@ -312,9 +316,10 @@ def processUnFav(favorite):
 
     return 'Delete Favorite' 
 
-
 @app.route('/printable/<menu_id>/<recipe_id>', methods=['GET'])
 def show_printable_recipe(menu_id, recipe_id):
+    """Show printable page for a recipe"""
+
     db.engine.dispose()
 
     userid = session['user_id']
@@ -326,6 +331,8 @@ def show_printable_recipe(menu_id, recipe_id):
 
 @app.route('/printable/<menu_id>/<recipe_id>/shopping-list', methods=['GET'])
 def show_printable_shopping_list(menu_id, recipe_id):
+    """Show printable page for a recipe's shopping list"""
+
     db.engine.dispose()
 
     userid = session['user_id']
@@ -337,6 +344,8 @@ def show_printable_shopping_list(menu_id, recipe_id):
 
 @app.route('/printable/<menu_id>', methods=['GET'])
 def show_print_all_recipes(menu_id):
+    """Show printable page for all recipes in the dinner menu"""
+
     db.engine.dispose()
 
     userid = session['user_id']
@@ -358,6 +367,8 @@ def show_print_all_recipes(menu_id):
 
 @app.route('/printable/<menu_id>/shopping-list-all', methods=['GET'])
 def show_printable_all_shopping_list(menu_id):
+    """Show dinner menu shopping list"""
+
     db.engine.dispose()
 
     userid = session['user_id']
