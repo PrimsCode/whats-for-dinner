@@ -25,6 +25,9 @@
             <a href="/dinner-view/{{menu.id}}"><button class="m-1 btn btn-sm btn-success" style="font-size:11px">Back</button></a>
             <span style="font-weight:500">Direction:</span> Right click and select print or use Ctrl P keyboard shortcut.
         </p>
+        <div class="text-center" id="msgDisplay">
+                   
+        </div>
 
         {% for recipe in recipes %}
         <input type="hidden" id="recipeId" name="recipeId" value="{{recipe}}">

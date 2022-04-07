@@ -71,7 +71,12 @@ if (searchForm) {
 function getSearchResults(searchTerm){
     let url = baseUrl + "complexSearch?query=" + searchTerm + '&number=5' + '&apiKey=' + apiKey;
     fetch(url)
-    .then(res => res.json())
+    .then(res => {
+        if (res.status === 402){
+            apiError();
+        }
+        return res.json()
+    })
     .then(data=>{
         searchResults = data;
 
@@ -82,6 +87,13 @@ function getSearchResults(searchTerm){
         }            
     })
 }
+
+//show api request error message
+function apiError(){
+    msgDisplay.innerHTML = `<div class="container m-2 bg-danger text-dark">
+        <p class="pt-2 pb-2" style="font-weight:600">Sorry! We've hitted our search limit for today. Try again tomorrow!</p>
+    </div>`;
+}; 
 
 //handle when search result is zero
 function zeroResult(){
@@ -241,12 +253,12 @@ function createMenuObj(menu){
         }
 
     } else {
-        return error();
+        return mainCourseError();
     }    
 }
 
-//show error message
-function error(){
+//show main course error message
+function mainCourseError(){
     msgDisplay.innerHTML = `<div class="container m-2 bg-danger text-dark">
         <p class="pt-2 pb-2" style="font-weight:600">Please add a main course to your menu!</p>
     </div>`;
@@ -326,14 +338,22 @@ if (printAllIngredients) {
         }
         getAllIngredients(recipeJson);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        console.log(err);
+        apiError();
+    });
 }
 
 //Get recipe data from external API and call showRecipe
 function findRecipe(id){
     let url = baseUrl + id + '/information?includeNutrition=false' + '&apiKey=' + apiKey;
     fetch(url)
-    .then(res=>res.json())
+    .then(res => {
+        if (res.status === 402){
+            apiError();
+        }
+        return res.json()
+    })
     .then(data=>{
         if(recipeView){
             showRecipe(data);
