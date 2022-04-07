@@ -51,7 +51,7 @@ def show_signup_page():
         username = form.username.data
         password = form.password.data
 
-        if User.query.filer_by(username=username).first():
+        if User.query.filter_by(username=username).first():
             form.username.errors = ['username already exists, please try a different one']
         else:
             new_user = User.register(username, password, first_name, last_name)
