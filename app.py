@@ -49,16 +49,17 @@ def show_signup_page():
         first_name = form.first_name.data
         last_name = form.last_name.data
         username = form.username.data
-        password = form.password.data        
-        new_user = User.register(username, password, first_name, last_name)
+        password = form.password.data
 
-        db.session.add(new_user)
-        db.session.commit()
-
-        session['user_id'] = new_user.id
-
-        flash(f'{new_user.username} has signed up')        
-        return redirect(f'/{new_user.username}/dinner-plan')
+        if User.query.filer_by(username=username).first():
+            form.username.errors = ['username already exists, please try a different one']
+        else:
+            new_user = User.register(username, password, first_name, last_name)
+            db.session.add(new_user)
+            db.session.commit()
+            session['user_id'] = new_user.id
+            flash(f'{new_user.username} has signed up')        
+            return redirect(f'/{new_user.username}/dinner-plan')               
     
     return render_template('signup.html', form=form)
 
