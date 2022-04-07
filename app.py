@@ -192,7 +192,7 @@ def view_complete_dinner(menu_id):
     return render_template('dinner_view.html', user=user, menu=menu, menu_user=menu_user)
 
 
-@app.route('/dinner-edit/<menu_id>', methods=['Get'])
+@app.route('/dinner-edit/<menu_id>', methods=['GET', 'POST'])
 def edit_dinner_plan(menu_id):
     """Edit dinner menu"""
     db.engine.dispose()
@@ -212,13 +212,13 @@ def edit_dinner_plan(menu_id):
 @app.route('/editInfo/<string:dinner_menu>', methods=['POST', 'GET'])
 def editInfo(dinner_menu):
 
-    dinner_menu = json.loads(dinner_menu)
-    menu_id = dinner_menu['id']['id']
+    temp_dinner_menu = json.loads(dinner_menu)
+    menu_id = temp_dinner_menu['id']['id']
 
     menu = DinnerMenu.query.filter_by(id=menu_id).first()
 
-    if dinner_menu['appetizer']:
-        recipe = dinner_menu['appetizer']
+    if temp_dinner_menu['appetizer']['id'] != None:
+        recipe = temp_dinner_menu['appetizer']
         if Recipe.query.get(recipe['id']):
             exist_recipe = Recipe.query.get(recipe['id'])
             menu.appetizer = exist_recipe.id
@@ -228,8 +228,9 @@ def editInfo(dinner_menu):
             db.session.commit()
             added_recipe = Recipe.query.get(recipe['id'])
             menu.appetizer = added_recipe.id
-    if dinner_menu['main_course']:
-        recipe = dinner_menu['main_course']
+
+    if temp_dinner_menu['main_course']['id'] != None:
+        recipe = temp_dinner_menu['main_course']
         if Recipe.query.get(recipe['id']):
             exist_recipe = Recipe.query.get(recipe['id'])
             menu.main_course = exist_recipe.id
@@ -239,8 +240,9 @@ def editInfo(dinner_menu):
             db.session.commit()
             added_recipe = Recipe.query.get(recipe['id'])
             menu.main_course = added_recipe.id
-    if dinner_menu['side_dish']:
-        recipe = dinner_menu['side_dish']
+
+    if temp_dinner_menu['side_dish']['id'] != None:
+        recipe = temp_dinner_menu['side_dish']
         if Recipe.query.get(recipe['id']):
             exist_recipe = Recipe.query.get(recipe['id'])
             menu.side_dish = exist_recipe.id
@@ -250,8 +252,9 @@ def editInfo(dinner_menu):
             db.session.commit()
             added_recipe = Recipe.query.get(recipe['id'])
             menu.side_dish = added_recipe.id
-    if dinner_menu['dessert']:
-        recipe = dinner_menu['dessert']
+
+    if temp_dinner_menu['dessert']['id'] != None:
+        recipe = temp_dinner_menu['dessert']
         if Recipe.query.get(recipe['id']):
             exist_recipe = Recipe.query.get(recipe['id'])
             menu.dessert = exist_recipe.id

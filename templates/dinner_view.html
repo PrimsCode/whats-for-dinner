@@ -90,7 +90,10 @@
                     <button class="btn btn-sm btn-success mt-2">Back</button>
                 </a>
                 <a href="/printable/{{menu.id}}">
-                    <button class="btn btn-sm btn-success mt-2">Print Recipes</button>
+                    <button class="btn btn-sm btn-warning mt-2">All Recipes</button>
+                </a>
+                <a href="/printable/{{menu.id}}/shopping-list-all">
+                    <button class="btn btn-sm btn-warning mt-2">Shopping List</button>
                 </a>
                 {% if session['user_id'] == menu.user_id %}
                 <a href="/dinner-edit/{{menu.id}}">
