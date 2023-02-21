@@ -3,13 +3,16 @@ from flask import Flask, render_template, redirect, flash, url_for, request, ses
 from models import db, connect_db, User, DinnerMenu, Recipe, FavoriteDinnerMenu
 from forms import LoginForm, SignUpForm
 import os
-import re
+import psycopg2
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
 app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', '12345')
 app.debug = True
 # debug = DebugToolbarExtension(app)
+
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner').replace('postgres://', 'postgresql://')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
