@@ -11,6 +11,8 @@ A web app to help you plan your dinner menu. | Capstone I Project for Springboar
 This is a fullstack project to showcase my knowledge of how to create interaction between frontend and backend.
 The project uses an External API from Spoonacular and a backend database handled by PostgreSQL.
 
+Experience the web app on heroku here: https://pbj-whats-for-dinner-app.herokuapp.com/
+
 ## Stack
 #### Frontend:
 * HTML
