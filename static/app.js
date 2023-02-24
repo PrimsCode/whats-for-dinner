@@ -1,6 +1,7 @@
 const baseUrl = 'https://api.spoonacular.com/recipes/';
-import {apiKey} from './secrets.js';
-
+// import {apiKey} from './secrets.js';
+// const apiKey = API_KEY;
+let apiKey ='';
 let searchResults = {};
 let date = "";
 let meal = "";
@@ -28,6 +29,13 @@ const recipeView = document.querySelector('#recipeView');
 const printAllIngredients = document.querySelector("#printAllIngredients")
 const printIngredients = document.querySelector("#printIngredients")
 
+//get API Key from flask app
+$.get('/api_key', function(data) {
+    console.log(data.api_key)
+    console.log(data)
+    console.log(JSON.stringify(data))
+    apiKey = data.api_key
+});
 
 //function for datepicker calendar 
 flatpickr("input[type=date]", {

@@ -2,8 +2,15 @@ from flask import Flask, render_template, redirect, flash, url_for, request, ses
 # from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, DinnerMenu, Recipe, FavoriteDinnerMenu
 from forms import LoginForm, SignUpForm
+
+from dotenv import load_dotenv
 import os
 import psycopg2
+
+load_dotenv()
+
+api_key = os.getenv('API_KEY')
+sqlLocalPath = os.getenv('SQLALCHEMY_LOCAL_URI')
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
@@ -11,11 +18,14 @@ app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', '12345')
 app.debug = True
 # debug = DebugToolbarExtension(app)
 
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner').replace('postgres://', 'postgresql://', 1)
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://postgres:admin@localhost:5432/whats_for_dinner')
+# DATABASE_URL = os.environ.get('SQLALCHEMY_DATABASE_URI')
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner').replace('postgres://', 'postgresql://')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', sqlLocalPath)
+# DATABASE_URL = os.environ.get('SQLALCHEMY_DATABASE_URI')
+# DATABASE_URL = os.environ['DATABASE_URL']
+# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
@@ -26,6 +36,10 @@ db.create_all()
 def landing_page():
     """Show landing page"""
     return render_template('index.html')
+
+@app.route('/api_key')
+def get_api_key():
+    return jsonify({'api_key': api_key})
 
 @app.route('/home', methods=['GET', 'POST'])
 def show_home():
