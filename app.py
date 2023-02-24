@@ -18,11 +18,7 @@ app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', '12345')
 app.debug = True
 # debug = DebugToolbarExtension(app)
 
-
-# DATABASE_URL = os.environ.get('SQLALCHEMY_DATABASE_URI')
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost:5432/whats_for_dinner').replace('postgres://', 'postgresql://')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', sqlLocalPath)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', sqlLocalPath).replace('postgres://', 'postgresql://')
 # DATABASE_URL = os.environ.get('SQLALCHEMY_DATABASE_URI')
 # DATABASE_URL = os.environ['DATABASE_URL']
 # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
